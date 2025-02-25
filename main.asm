@@ -1,0 +1,230 @@
+;-----------------------------------------------
+; Universidad del Valle de Guatemala
+; IE2023: Programacion de Microcontroladores
+; PostLaboratorio3.asm
+; Autor: David Carranza
+; Proyecto: LABORATORIO_2
+; Hardware: ATMEGA328P
+; Creado: 14/02/2025 
+; Ultima modificacion: 20/02/2025
+; Descripción:
+;-----------------------------------------------
+
+/////////////CONFIGURACION GENERAL//////////////////////////////////////
+.include "M328PDEF.inc"
+
+.cseg
+.org	0x0000				//VECTOR DE RESET
+		RJMP	SETUP
+.org	0x0008				//VECTOR DE INTERRUPCION PIN CHANGE INTERRUPT R1
+		RJMP	PIN_CHANGE
+.org    0x0020
+		RJMP    DISPLAY_CHANGE	//VECTOR DE INTERRUPCION TIMER0
+
+DATA:
+
+
+    .db 0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90
+
+//////////////////////////////////DEFINICION VARIABLES GLOBALES/////////////
+
+.def	DISP_COUNTER = R18  //DEFINICION DE VARIABLE GLOBAL EN REGISTRO R18
+.def	PIN_PREV =	R19
+.def	LED_COUNTER = R22   //DEFINICION DE VARIABLE GLOBAL EN REGISTRO R22
+.def	COUNTER = R23		//DEFINICION DE VARIABLE GLOBAL EN REGISTRO R23
+
+////////////////////////////////////CONFIGURANDO EL MCU//////////////////////
+SETUP:
+
+	//////////////////////CONFIGURACION TIMER///////////////////////////////
+	LDI R16, (1 << CLKPCE)    ; Habilitar cambios en CLKPR (CLKPCE = 1)
+	STS CLKPR, R16			  ; Escribir en CLKPR para desbloquear cambios
+	LDI R16, 0b00000100       ; Configurar prescaler a 8 (8 MHz / 8 = 1 MHz)
+	STS CLKPR, R16            ; Aplicar prescaler
+
+	
+	//////////////////INICIAR TIMER0 E INTERRUPCIONES////////////////////////
+	
+	//PILA
+	LDI		R16, LOW(RAMEND)
+	OUT		SPL, R16
+	LDI		R16, HIGH(RAMEND)
+	OUT		SPH, R16
+
+	//PUNTERO
+	LDI		ZH, HIGH(DATA << 1)
+	LDI		ZL, LOW(DATA << 1)
+	LPM		R16, Z
+	OUT		PORTD, R16
+
+	//CONFIGURANDO SALIDAS
+	LDI		R16, 0xFF
+	OUT		DDRD, R16	//TODO PORTD COMO SALIDA
+	OUT		DDRB, R16	//TODO PORTB COMO SALIDA
+	LDI		R16, 0x00
+	OUT		PORTD,	R16	//TODO PORTD PULL UP DESACTIVADO
+	OUT		PORTB, R16  //TODO PORTD PULL UP DESACTIVADO
+	 
+	//CONFIGURANDO INPUTS
+	LDI		R16, 0x20
+	OUT		DDRC, R16	//TODO PORTC COMO INPUT
+	LDI		R16, 0x1F
+	OUT		PORTC, R16	//TODO PORTC PULL UP ACTIVADOD
+
+	//PUNTERO
+	LDI		ZH, HIGH(DATA << 1)
+	LDI		ZL, LOW(DATA << 1)
+	LPM		R16, Z
+	OUT		PORTD, R16
+
+	//APAGAR LEDS ARDUINO
+	LDI		R16, 0x00
+	STS		UCSR0B, R16
+
+	//CONFIGURACIONES INICIALES
+	LDI		R17, 0xFF		//GUARDA EL VALOR DEL CONTADOR
+	LDI		R18, 0x00		//CONTADOR DE LOS LEDS
+	LDI		COUNTER, 0x00	//CONTADOR INTERNO DEL TIMER0
+	LDI		R22, 0x00
+	OUT		PORTD, R18
+	OUT		PORTB, R22
+
+	LDI     DISP_COUNTER, 0x00
+	LDI     ZH, HIGH(DATA << 1)
+	LDI     ZL, LOW(DATA << 1)
+	LPM     R16, Z              ; Cargar el primer número (0x3F) de DATA
+	OUT     PORTD, R16          ; Mostrar el 0 correctamente en el display
+		//Modifico el 7 segmentos en PORTD
+
+
+	//MOSTRAR EL VALOR ACTUAL DEL DISPLAY(TIENE QUE SER 0)
+	//CALL	DISPLAY
+	CALL	 INIT_TMR0
+    CALL	 PORTC_INT
+	SEI
+
+
+MAIN:
+	RJMP	MAIN
+
+//TIMER0 COMO INTERRUPCION
+INIT_TMR0:
+
+	LDI		R16, (1<<CS01) | (1<<CS00) //PRESCALER 64
+	OUT		TCCR0B, R16				   //ACTIVA EL PRESCALER EN TCCR0B
+	LDI		R16, 60				   //VALOR DESDE DONDE INICIAMOS
+	OUT		TCNT0, R16				   //CARGA EL VALOR A TCNT0 
+	//HABILITAR INTERRUPCION DE OVERFLOW
+	LDI		R16, (1 << TOIE0)			//INTERRUPCION POR OVERFLOW
+	STS		TIMSK0, R16					//HABILITAR MASCARA
+
+	RET
+//PORTC COMO INTERRUPCION
+PORTC_INT:
+	
+	LDI			R16, (1 << PCIE1)					//HABLITANDO PIN CHANGE EN PORTC
+	STS			PCICR, R16
+		
+	LDI			R16, (1 << PCINT8) | (1 << PCINT9)	//HABILITAR PIN CHANGE PC0 & PC1
+	STS			PCMSK1, R16
+
+	RET
+
+
+DISPLAY_CHANGE:
+
+	PUSH    R16
+    IN      R16, SREG
+    PUSH    R16
+	PUSH	R17
+	LDI		R16, 100			// VALOR QUE SE CARGA AL TEMPORIZADOR PARA CONTAR
+	OUT		TCNT0, R16
+	
+	INC		COUNTER				
+	CPI		COUNTER, 100		//HACE LA COMPARACIÓN SI ES IGUAL A 10(QUE TAN RAPIDO CUENTA)
+	BRNE	CONTADOR_EXIT		//Z = 0, SALTA A CONTADOR_EXIT. Z = 1, NO SALTA.
+	CLR		COUNTER		
+
+    ; Verificar si se debe incrementar o decrementar el contador
+	
+	INC		DISP_COUNTER
+	ANDI	DISP_COUNTER,  0x0F
+    LDI		ZH, HIGH(DATA << 1)
+	LDI		ZL, LOW(DATA << 1)	//PUNTERO APUNTA A LA TABLA Z
+	ADD		ZL, DISP_COUNTER				//Añadir el valor del contador R20 al puntero Z para obtener la salida en PORTD
+	LPM		R16, Z				//Copia el valor guardado en el nuevo Z
+	OUT		PORTD, R16			//Modifico el 7 segmentos en PORTD
+CONTADOR_EXIT: 
+	
+	POP		R17
+    POP     R16
+    OUT     SREG, R16
+    POP     R16   
+	RETI	
+
+
+//PINCHANGE COMO INTERRUPCION
+PIN_CHANGE:
+	
+	PUSH    R16
+    IN      R16, SREG
+    PUSH    R16
+	PUSH	R17
+
+    IN      R16, PINC		//LEER PINC
+	MOV		R17, R16
+	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
+	BREQ	EXIT  
+	CALL	DELAY
+
+	IN      R16, PINC		//LEER PINC
+	MOV		R17, R16
+	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
+	BREQ	EXIT  
+    
+	SBRC	R17, PC1
+	CALL	INCREMENTO
+
+	SBRC	R17, PC0
+	CALL	DECREMENTO
+
+	MOV		PIN_PREV, R16	//ACTUALIZAR CON EL ESTADO EN QUE SE QUEDO
+
+EXIT:
+	POP		R17
+    POP     R16
+    OUT     SREG, R16
+    POP     R16
+    RETI
+	
+INCREMENTO:
+
+	INC			LED_COUNTER
+	ANDI		LED_COUNTER, 0x0F
+	OUT			PORTB, LED_COUNTER
+	RET
+	
+DECREMENTO:
+
+	DEC			LED_COUNTER
+	ANDI		LED_COUNTER, 0x0F
+	OUT			PORTB, LED_COUNTER
+	RET
+	
+DELAY:
+    LDI     R19, 0xFF
+SUB_DELAY1:
+    DEC     R19
+    CPI     R19, 0
+    BRNE    SUB_DELAY1
+    LDI     R19, 0xFF
+SUB_DELAY2:
+    DEC     R19
+    CPI     R19, 0
+    BRNE    SUB_DELAY2
+    LDI     R19, 0xFF
+SUB_DELAY3:
+    DEC     R19
+    CPI     R19, 0
+    BRNE    SUB_DELAY3
+    RET
