@@ -1,6 +1,6 @@
 ;-----------------------------------------------
 ; Universidad del Valle de Guatemala
-; IE2023: Programacion de Microcontroladores
+; IE2023: Programacion de Microcontrolado
 ; PostLaboratorio3.asm
 ; Autor: David Carranza
 ; Proyecto: LABORATORIO_2
