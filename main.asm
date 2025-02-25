@@ -1,25 +1,26 @@
-;-----------------------------------------------
-; Universidad del Valle de Guatemala
-; IE2023: Programacion de Microcontrolado
-; PostLaboratorio3.asm
-; Autor: David Carranza
-; Proyecto: LABORATORIO_2
-; Hardware: ATMEGA328P
-; Creado: 14/02/2025 
-; Ultima modificacion: 20/02/2025
-; Descripción:
-;-----------------------------------------------
+/*
+PostLaboratorio3.asm
 
-/////////////CONFIGURACION GENERAL//////////////////////////////////////
+Autor: David Carranza
+Proyecto: Laboratorio3 y Postlaboratorio3
+
+Creado: 21/02/2025 
+
+Descripción:
+*/
+
+// Encabezado
 .include "M328PDEF.inc"
 
+// Variables
 .cseg
-.org	0x0000				//VECTOR DE RESET
+.org	0x0000				//Vector de Reset
 		RJMP	SETUP
 .org	0x0008				//VECTOR DE INTERRUPCION PIN CHANGE INTERRUPT R1
 		RJMP	PIN_CHANGE
 .org    0x0020
 		RJMP    DISPLAY_CHANGE	//VECTOR DE INTERRUPCION TIMER0
+
 
 DATA:
 
