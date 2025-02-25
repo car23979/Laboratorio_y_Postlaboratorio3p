@@ -19,7 +19,7 @@ Descripción:
 .org	0x0008				//Vector de Interrupción PINCHANGE Interrupt R1
 		RJMP	PIN_CHANGE
 .org    0x0020
-		RJMP    DISPLAY_CHANGE	//VECTOR DE INTERRUPCION TIMER0
+		RJMP    DISPLAY_CHANGE	//Vector de Interrupción TIMER0
 
 
 DATA:
