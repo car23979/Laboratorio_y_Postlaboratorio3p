@@ -16,7 +16,7 @@ Descripción:
 .cseg
 .org	0x0000				//Vector de Reset
 		RJMP	SETUP
-.org	0x0008				//VECTOR DE INTERRUPCION PIN CHANGE INTERRUPT R1
+.org	0x0008				//Vector de Interrupción PINCHANGE Interrupt R1
 		RJMP	PIN_CHANGE
 .org    0x0020
 		RJMP    DISPLAY_CHANGE	//VECTOR DE INTERRUPCION TIMER0
