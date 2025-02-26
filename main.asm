@@ -21,7 +21,7 @@ Descripción:
 .org    0x0020
 		RJMP    DISPLAY_CHANGE	//Vector de Interrupción TIMER0
 
-
+		
 DATA:
 
 
