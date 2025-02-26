@@ -1,0 +1,42 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\Debug\AssemblerApplication10.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>AssemblerApplication10.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>AssemblerApplication10.map</FILE>
+  <FILE>AssemblerApplication10.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <SETUP><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>38</LINE></SETUP>
+  <PIN_CHANGE><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>168</LINE></PIN_CHANGE>
+  <DISPLAY_CHANGE><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>135</LINE></DISPLAY_CHANGE>
+  <DATA><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>25</LINE></DATA>
+  <INIT_TMR0><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>112</LINE></INIT_TMR0>
+  <PORTC_INT><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>124</LINE></PORTC_INT>
+  <MAIN><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>108</LINE></MAIN>
+  <CONTADOR_EXIT><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>158</LINE></CONTADOR_EXIT>
+  <EXIT><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>194</LINE></EXIT>
+  <DELAY><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>215</LINE></DELAY>
+  <INCREMENTO><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>201</LINE></INCREMENTO>
+  <DECREMENTO><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>208</LINE></DECREMENTO>
+  <SUB_DELAY1><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>217</LINE></SUB_DELAY1>
+  <SUB_DELAY2><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>222</LINE></SUB_DELAY2>
+  <SUB_DELAY3><FILE>C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm</FILE><LINE>227</LINE></SUB_DELAY3>
+ </LABELS>
+</ASSEMBLER_INFO>
