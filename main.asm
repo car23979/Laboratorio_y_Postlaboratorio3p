@@ -30,6 +30,11 @@ Descripción:
 .cseg
 .def CONTADOR = R19  // Variable para el contador
 
+// Configuración de Pila
+    LDI     R16, LOW(RAMEND)
+    OUT     SPL, R16
+    LDI     R16, HIGH(RAMEND)
+    OUT     SPH, R16
 		
 DATA:
 
