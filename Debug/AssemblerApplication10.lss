@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm Wed Feb 26 03:44:45 2025
+AVRASM ver. 2.2.8  C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm Thu Feb 27 12:56:54 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\main.asm(13): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.inc'
@@ -1046,11 +1046,11 @@ C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\
                                  // Variables
                                  .cseg
                                  .org	0x0000				//Vector de Reset
-000000 c025                      		RJMP	SETUP
+000000 c028                      		RJMP	SETUP
                                  .org	0x0008				//Vector de Interrupción PINCHANGE Interrupt R1
-000008 c072                      		RJMP	PIN_CHANGE
+000008 c075                      		RJMP	PIN_CHANGE
                                  .org    0x0020
-000020 c044                      		RJMP    DISPLAY_CHANGE	//Vector de Interrupción TIMER0
+000020 c047                      		RJMP    DISPLAY_CHANGE	//Vector de Interrupción TIMER0
                                  
                                  		
                                  DATA:
@@ -1060,7 +1060,10 @@ C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\
 000022 b0a4
 000023 9299
 000024 f882
-000025 9080                          .db 0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90
+000025 9080
+000026 8388
+000027 a1c6
+000028 8e86                          .db 0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
                                  
                                  //////////////////////////////////DEFINICION VARIABLES GLOBALES/////////////
                                  
@@ -1073,197 +1076,197 @@ C:\Users\Admin\Documents\GitHub\Postlaboratorio3\Laboratorio_y_Postlaboratorio3\
                                  SETUP:
                                  
                                  	//////////////////////CONFIGURACION TIMER///////////////////////////////
-000026 e800                      	LDI R16, (1 << CLKPCE)    ; Habilitar cambios en CLKPR (CLKPCE = 1)
-000027 9300 0061                 	STS CLKPR, R16			  ; Escribir en CLKPR para desbloquear cambios
-000029 e004                      	LDI R16, 0b00000100       ; Configurar prescaler a 8 (8 MHz / 8 = 1 MHz)
-00002a 9300 0061                 	STS CLKPR, R16            ; Aplicar prescaler
+000029 e800                      	LDI R16, (1 << CLKPCE)    ; Habilitar cambios en CLKPR (CLKPCE = 1)
+00002a 9300 0061                 	STS CLKPR, R16			  ; Escribir en CLKPR para desbloquear cambios
+00002c e004                      	LDI R16, 0b00000100       ; Configurar prescaler a 8 (8 MHz / 8 = 1 MHz)
+00002d 9300 0061                 	STS CLKPR, R16            ; Aplicar prescaler
                                  
                                  	
                                  	//////////////////INICIAR TIMER0 E INTERRUPCIONES////////////////////////
                                  	
                                  	//PILA
-00002c ef0f                      	LDI		R16, LOW(RAMEND)
-00002d bf0d                      	OUT		SPL, R16
-00002e e008                      	LDI		R16, HIGH(RAMEND)
-00002f bf0e                      	OUT		SPH, R16
+00002f ef0f                      	LDI		R16, LOW(RAMEND)
+000030 bf0d                      	OUT		SPL, R16
+000031 e008                      	LDI		R16, HIGH(RAMEND)
+000032 bf0e                      	OUT		SPH, R16
                                  
                                  	//PUNTERO
-000030 e0f0                      	LDI		ZH, HIGH(DATA << 1)
-000031 e4e2                      	LDI		ZL, LOW(DATA << 1)
-000032 9104                      	LPM		R16, Z
-000033 b90b                      	OUT		PORTD, R16
+000033 e0f0                      	LDI		ZH, HIGH(DATA << 1)
+000034 e4e2                      	LDI		ZL, LOW(DATA << 1)
+000035 9104                      	LPM		R16, Z
+000036 b90b                      	OUT		PORTD, R16
                                  
                                  	//CONFIGURANDO SALIDAS
-000034 ef0f                      	LDI		R16, 0xFF
-000035 b90a                      	OUT		DDRD, R16	//TODO PORTD COMO SALIDA
-000036 b904                      	OUT		DDRB, R16	//TODO PORTB COMO SALIDA
-000037 e000                      	LDI		R16, 0x00
-000038 b90b                      	OUT		PORTD,	R16	//TODO PORTD PULL UP DESACTIVADO
-000039 b905                      	OUT		PORTB, R16  //TODO PORTD PULL UP DESACTIVADO
+000037 ef0f                      	LDI		R16, 0xFF
+000038 b90a                      	OUT		DDRD, R16	//TODO PORTD COMO SALIDA
+000039 b904                      	OUT		DDRB, R16	//TODO PORTB COMO SALIDA
+00003a e000                      	LDI		R16, 0x00
+00003b b90b                      	OUT		PORTD,	R16	//TODO PORTD PULL UP DESACTIVADO
+00003c b905                      	OUT		PORTB, R16  //TODO PORTD PULL UP DESACTIVADO
                                  	 
                                  	//CONFIGURANDO INPUTS
-00003a e200                      	LDI		R16, 0x20
-00003b b907                      	OUT		DDRC, R16	//TODO PORTC COMO INPUT
-00003c e10f                      	LDI		R16, 0x1F
-00003d b908                      	OUT		PORTC, R16	//TODO PORTC PULL UP ACTIVADOD
+00003d e200                      	LDI		R16, 0x20
+00003e b907                      	OUT		DDRC, R16	//TODO PORTC COMO INPUT
+00003f e10f                      	LDI		R16, 0x1F
+000040 b908                      	OUT		PORTC, R16	//TODO PORTC PULL UP ACTIVADOD
                                  
                                  	//PUNTERO
-00003e e0f0                      	LDI		ZH, HIGH(DATA << 1)
-00003f e4e2                      	LDI		ZL, LOW(DATA << 1)
-000040 9104                      	LPM		R16, Z
-000041 b90b                      	OUT		PORTD, R16
+000041 e0f0                      	LDI		ZH, HIGH(DATA << 1)
+000042 e4e2                      	LDI		ZL, LOW(DATA << 1)
+000043 9104                      	LPM		R16, Z
+000044 b90b                      	OUT		PORTD, R16
                                  
                                  	//APAGAR LEDS ARDUINO
-000042 e000                      	LDI		R16, 0x00
-000043 9300 00c1                 	STS		UCSR0B, R16
+000045 e000                      	LDI		R16, 0x00
+000046 9300 00c1                 	STS		UCSR0B, R16
                                  
                                  	//CONFIGURACIONES INICIALES
-000045 ef1f                      	LDI		R17, 0xFF		//GUARDA EL VALOR DEL CONTADOR
-000046 e020                      	LDI		R18, 0x00		//CONTADOR DE LOS LEDS
-000047 e070                      	LDI		COUNTER, 0x00	//CONTADOR INTERNO DEL TIMER0
-000048 e060                      	LDI		R22, 0x00
-000049 b92b                      	OUT		PORTD, R18
-00004a b965                      	OUT		PORTB, R22
+000048 ef1f                      	LDI		R17, 0xFF		//GUARDA EL VALOR DEL CONTADOR
+000049 e020                      	LDI		R18, 0x00		//CONTADOR DE LOS LEDS
+00004a e070                      	LDI		COUNTER, 0x00	//CONTADOR INTERNO DEL TIMER0
+00004b e060                      	LDI		R22, 0x00
+00004c b92b                      	OUT		PORTD, R18
+00004d b965                      	OUT		PORTB, R22
                                  
-00004b e020                      	LDI     DISP_COUNTER, 0x00
-00004c e0f0                      	LDI     ZH, HIGH(DATA << 1)
-00004d e4e2                      	LDI     ZL, LOW(DATA << 1)
-00004e 9104                      	LPM     R16, Z              ; Cargar el primer número (0x3F) de DATA
-00004f b90b                      	OUT     PORTD, R16          ; Mostrar el 0 correctamente en el display
+00004e e020                      	LDI     DISP_COUNTER, 0x00
+00004f e0f0                      	LDI     ZH, HIGH(DATA << 1)
+000050 e4e2                      	LDI     ZL, LOW(DATA << 1)
+000051 9104                      	LPM     R16, Z              ; Cargar el primer número (0x3F) de DATA
+000052 b90b                      	OUT     PORTD, R16          ; Mostrar el 0 correctamente en el display
                                  		//Modifico el 7 segmentos en PORTD
                                  
                                  
                                  	//MOSTRAR EL VALOR ACTUAL DEL DISPLAY(TIENE QUE SER 0)
                                  	//CALL	DISPLAY
-000050 940e 0056                 	CALL	 INIT_TMR0
-000052 940e 005e                     CALL	 PORTC_INT
-000054 9478                      	SEI
+000053 940e 0059                 	CALL	 INIT_TMR0
+000055 940e 0061                     CALL	 PORTC_INT
+000057 9478                      	SEI
                                  
                                  
                                  MAIN:
-000055 cfff                      	RJMP	MAIN
+000058 cfff                      	RJMP	MAIN
                                  
                                  //TIMER0 COMO INTERRUPCION
                                  INIT_TMR0:
                                  
-000056 e003                      	LDI		R16, (1<<CS01) | (1<<CS00) //PRESCALER 64
-000057 bd05                      	OUT		TCCR0B, R16				   //ACTIVA EL PRESCALER EN TCCR0B
-000058 e30c                      	LDI		R16, 60				   //VALOR DESDE DONDE INICIAMOS
-000059 bd06                      	OUT		TCNT0, R16				   //CARGA EL VALOR A TCNT0 
+000059 e003                      	LDI		R16, (1<<CS01) | (1<<CS00) //PRESCALER 64
+00005a bd05                      	OUT		TCCR0B, R16				   //ACTIVA EL PRESCALER EN TCCR0B
+00005b e30c                      	LDI		R16, 60				   //VALOR DESDE DONDE INICIAMOS
+00005c bd06                      	OUT		TCNT0, R16				   //CARGA EL VALOR A TCNT0 
                                  	//HABILITAR INTERRUPCION DE OVERFLOW
-00005a e001                      	LDI		R16, (1 << TOIE0)			//INTERRUPCION POR OVERFLOW
-00005b 9300 006e                 	STS		TIMSK0, R16					//HABILITAR MASCARA
+00005d e001                      	LDI		R16, (1 << TOIE0)			//INTERRUPCION POR OVERFLOW
+00005e 9300 006e                 	STS		TIMSK0, R16					//HABILITAR MASCARA
                                  
-00005d 9508                      	RET
+000060 9508                      	RET
                                  //PORTC COMO INTERRUPCION
                                  PORTC_INT:
                                  	
-00005e e002                      	LDI			R16, (1 << PCIE1)					//HABLITANDO PIN CHANGE EN PORTC
-00005f 9300 0068                 	STS			PCICR, R16
+000061 e002                      	LDI			R16, (1 << PCIE1)					//HABLITANDO PIN CHANGE EN PORTC
+000062 9300 0068                 	STS			PCICR, R16
                                  		
-000061 e003                      	LDI			R16, (1 << PCINT8) | (1 << PCINT9)	//HABILITAR PIN CHANGE PC0 & PC1
-000062 9300 006c                 	STS			PCMSK1, R16
+000064 e003                      	LDI			R16, (1 << PCINT8) | (1 << PCINT9)	//HABILITAR PIN CHANGE PC0 & PC1
+000065 9300 006c                 	STS			PCMSK1, R16
                                  
-000064 9508                      	RET
+000067 9508                      	RET
                                  
                                  
                                  DISPLAY_CHANGE:
                                  
-000065 930f                      	PUSH    R16
-000066 b70f                          IN      R16, SREG
-000067 930f                          PUSH    R16
-000068 931f                      	PUSH	R17
-000069 e604                      	LDI		R16, 100			// VALOR QUE SE CARGA AL TEMPORIZADOR PARA CONTAR
-00006a bd06                      	OUT		TCNT0, R16
+000068 930f                      	PUSH    R16
+000069 b70f                          IN      R16, SREG
+00006a 930f                          PUSH    R16
+00006b 931f                      	PUSH	R17
+00006c e604                      	LDI		R16, 100			// VALOR QUE SE CARGA AL TEMPORIZADOR PARA CONTAR
+00006d bd06                      	OUT		TCNT0, R16
                                  	
-00006b 9573                      	INC		COUNTER				
-00006c 3674                      	CPI		COUNTER, 100		//HACE LA COMPARACIÓN SI ES IGUAL A 10(QUE TAN RAPIDO CUENTA)
-00006d f441                      	BRNE	CONTADOR_EXIT		//Z = 0, SALTA A CONTADOR_EXIT. Z = 1, NO SALTA.
-00006e 2777                      	CLR		COUNTER		
+00006e 9573                      	INC		COUNTER				
+00006f 3674                      	CPI		COUNTER, 100		//HACE LA COMPARACIÓN SI ES IGUAL A 10(QUE TAN RAPIDO CUENTA)
+000070 f441                      	BRNE	CONTADOR_EXIT		//Z = 0, SALTA A CONTADOR_EXIT. Z = 1, NO SALTA.
+000071 2777                      	CLR		COUNTER		
                                  
                                      ; Verificar si se debe incrementar o decrementar el contador
                                  	
-00006f 9523                      	INC		DISP_COUNTER
-000070 702f                      	ANDI	DISP_COUNTER,  0x0F
-000071 e0f0                          LDI		ZH, HIGH(DATA << 1)
-000072 e4e2                      	LDI		ZL, LOW(DATA << 1)	//PUNTERO APUNTA A LA TABLA Z
-000073 0fe2                      	ADD		ZL, DISP_COUNTER				//Añadir el valor del contador R20 al puntero Z para obtener la salida en PORTD
-000074 9104                      	LPM		R16, Z				//Copia el valor guardado en el nuevo Z
-000075 b90b                      	OUT		PORTD, R16			//Modifico el 7 segmentos en PORTD
+000072 9523                      	INC		DISP_COUNTER
+000073 702f                      	ANDI	DISP_COUNTER,  0x0F
+000074 e0f0                          LDI		ZH, HIGH(DATA << 1)
+000075 e4e2                      	LDI		ZL, LOW(DATA << 1)	//PUNTERO APUNTA A LA TABLA Z
+000076 0fe2                      	ADD		ZL, DISP_COUNTER				//Añadir el valor del contador R20 al puntero Z para obtener la salida en PORTD
+000077 9104                      	LPM		R16, Z				//Copia el valor guardado en el nuevo Z
+000078 b90b                      	OUT		PORTD, R16			//Modifico el 7 segmentos en PORTD
                                  CONTADOR_EXIT: 
                                  	
-000076 911f                      	POP		R17
-000077 910f                          POP     R16
-000078 bf0f                          OUT     SREG, R16
-000079 910f                          POP     R16   
-00007a 9518                      	RETI	
+000079 911f                      	POP		R17
+00007a 910f                          POP     R16
+00007b bf0f                          OUT     SREG, R16
+00007c 910f                          POP     R16   
+00007d 9518                      	RETI	
                                  
                                  
                                  //PINCHANGE COMO INTERRUPCION
                                  PIN_CHANGE:
                                  	
-00007b 930f                      	PUSH    R16
-00007c b70f                          IN      R16, SREG
-00007d 930f                          PUSH    R16
-00007e 931f                      	PUSH	R17
+00007e 930f                      	PUSH    R16
+00007f b70f                          IN      R16, SREG
+000080 930f                          PUSH    R16
+000081 931f                      	PUSH	R17
                                  
-00007f b106                          IN      R16, PINC		//LEER PINC
-000080 2f10                      	MOV		R17, R16
-000081 2713                      	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
-000082 f069                      	BREQ	EXIT  
-000083 940e 009d                 	CALL	DELAY
+000082 b106                          IN      R16, PINC		//LEER PINC
+000083 2f10                      	MOV		R17, R16
+000084 2713                      	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
+000085 f069                      	BREQ	EXIT  
+000086 940e 00a0                 	CALL	DELAY
                                  
-000085 b106                      	IN      R16, PINC		//LEER PINC
-000086 2f10                      	MOV		R17, R16
-000087 2713                      	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
-000088 f039                      	BREQ	EXIT  
+000088 b106                      	IN      R16, PINC		//LEER PINC
+000089 2f10                      	MOV		R17, R16
+00008a 2713                      	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
+00008b f039                      	BREQ	EXIT  
                                      
-000089 fd11                      	SBRC	R17, PC1
-00008a 940e 0095                 	CALL	INCREMENTO
+00008c fd11                      	SBRC	R17, PC1
+00008d 940e 0098                 	CALL	INCREMENTO
                                  
-00008c fd10                      	SBRC	R17, PC0
-00008d 940e 0099                 	CALL	DECREMENTO
+00008f fd10                      	SBRC	R17, PC0
+000090 940e 009c                 	CALL	DECREMENTO
                                  
-00008f 2f30                      	MOV		PIN_PREV, R16	//ACTUALIZAR CON EL ESTADO EN QUE SE QUEDO
+000092 2f30                      	MOV		PIN_PREV, R16	//ACTUALIZAR CON EL ESTADO EN QUE SE QUEDO
                                  
                                  EXIT:
-000090 911f                      	POP		R17
-000091 910f                          POP     R16
-000092 bf0f                          OUT     SREG, R16
-000093 910f                          POP     R16
-000094 9518                          RETI
+000093 911f                      	POP		R17
+000094 910f                          POP     R16
+000095 bf0f                          OUT     SREG, R16
+000096 910f                          POP     R16
+000097 9518                          RETI
                                  	
                                  INCREMENTO:
                                  
-000095 9563                      	INC			LED_COUNTER
-000096 706f                      	ANDI		LED_COUNTER, 0x0F
-000097 b965                      	OUT			PORTB, LED_COUNTER
-000098 9508                      	RET
+000098 9563                      	INC			LED_COUNTER
+000099 706f                      	ANDI		LED_COUNTER, 0x0F
+00009a b965                      	OUT			PORTB, LED_COUNTER
+00009b 9508                      	RET
                                  	
                                  DECREMENTO:
                                  
-000099 956a                      	DEC			LED_COUNTER
-00009a 706f                      	ANDI		LED_COUNTER, 0x0F
-00009b b965                      	OUT			PORTB, LED_COUNTER
-00009c 9508                      	RET
+00009c 956a                      	DEC			LED_COUNTER
+00009d 706f                      	ANDI		LED_COUNTER, 0x0F
+00009e b965                      	OUT			PORTB, LED_COUNTER
+00009f 9508                      	RET
                                  	
                                  DELAY:
-00009d ef3f                          LDI     R19, 0xFF
+0000a0 ef3f                          LDI     R19, 0xFF
                                  SUB_DELAY1:
-00009e 953a                          DEC     R19
-00009f 3030                          CPI     R19, 0
-0000a0 f7e9                          BRNE    SUB_DELAY1
-0000a1 ef3f                          LDI     R19, 0xFF
+0000a1 953a                          DEC     R19
+0000a2 3030                          CPI     R19, 0
+0000a3 f7e9                          BRNE    SUB_DELAY1
+0000a4 ef3f                          LDI     R19, 0xFF
                                  SUB_DELAY2:
-0000a2 953a                          DEC     R19
-0000a3 3030                          CPI     R19, 0
-0000a4 f7e9                          BRNE    SUB_DELAY2
-0000a5 ef3f                          LDI     R19, 0xFF
+0000a5 953a                          DEC     R19
+0000a6 3030                          CPI     R19, 0
+0000a7 f7e9                          BRNE    SUB_DELAY2
+0000a8 ef3f                          LDI     R19, 0xFF
                                  SUB_DELAY3:
-0000a6 953a                          DEC     R19
-0000a7 3030                          CPI     R19, 0
-0000a8 f7e9                          BRNE    SUB_DELAY3
-0000a9 9508                          RET
+0000a9 953a                          DEC     R19
+0000aa 3030                          CPI     R19, 0
+0000ab f7e9                          BRNE    SUB_DELAY3
+0000ac 9508                          RET
 
 
 RESOURCE USE INFORMATION
@@ -1313,7 +1316,7 @@ Instructions used: 23 out of 113 (20.4%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000154    270     10    280   32768   0.9%
+[.cseg] 0x000000 0x00015a    270     16    286   32768   0.9%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
