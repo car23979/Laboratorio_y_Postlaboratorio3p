@@ -87,6 +87,26 @@ INICIO:
 MAIN:
 	RJMP	MAIN
 
+// SUBRUTINAS
+INCREMENTAR_CONTADOR:
+    INC     CONTADOR
+    CPI     CONTADOR, 0x10  // Reiniciar si llega a 16
+    BRNE    NO_RESET
+    LDI     CONTADOR, 0x00
+
+NO_RESET:
+    OUT     PORTB, CONTADOR
+    RET
+
+DECREMENTAR_CONTADOR:
+    CPI     CONTADOR, 0x00  // Verificar si el contador es 0
+    BRNE    DECREMENTAR_NORMAL  // Si no es 0, decrementar normalmente
+    LDI     CONTADOR, 0x10  // Si es 0, establecer el contador en 16 (0x10)
+DECREMENTAR_NORMAL:
+    DEC     CONTADOR        // Decrementar el contador
+    OUT     PORTB, CONTADOR // Actualizar el puerto B con el nuevo valor
+    RET
+
 //TIMER0 COMO INTERRUPCION
 INIT_TMR0:
 
