@@ -141,3 +141,21 @@ ACTUALIZAR_DECENAS:
     CLR     UNIDADES
     INC     CONTADOR_D
     RET
+
+RETARDO:
+    LDI     R18, 0xFF
+RETARDO_1:
+    DEC     R18
+    CPI     R18, 0
+    BRNE    RETARDO_1
+    LDI     R18, 0xFF
+RETARDO_2:
+    DEC     R18
+    CPI     R18, 0
+    BRNE    RETARDO_2
+    LDI     R18, 0xFF
+RETARDO_3:
+    DEC     R18
+    CPI     R18, 0
+    BRNE    RETARDO_3
+    RET
