@@ -61,6 +61,10 @@ INICIO:
 	LDI		R16, 0x1F
 	OUT		PORTC, R16	
 
+	// Deshabilitar serial (apaga LEDs adicionales)
+    LDI     R16, 0x00
+    STS     UCSR0B, R16
+
 	//PUNTERO
 	LDI		ZH, HIGH(DATA << 1)
 	LDI		ZL, LOW(DATA << 1)
