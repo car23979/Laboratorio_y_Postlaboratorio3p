@@ -44,7 +44,8 @@ INICIO:
     LDI     R16, 0b00000100
     STS     CLKPR, R16  // Prescaler a 16 (F_cpu = 1MHz)
 		
-	
+	// Inicializar Timer0
+    CALL    INICIALIZAR_TIMER
 
 	//CONFIGURANDO SALIDAS
 	LDI		R16, 0xFF
