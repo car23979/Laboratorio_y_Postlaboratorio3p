@@ -36,14 +36,10 @@ Descripción:
     LDI     R16, HIGH(RAMEND)
     OUT     SPH, R16
 		
-////////////////////////////////////CONFIGURANDO EL MCU//////////////////////
-SETUP:
+// Configuración MCU
+INICIO:
 
-	//////////////////////CONFIGURACION TIMER///////////////////////////////
-	LDI R16, (1 << CLKPCE)    ; Habilitar cambios en CLKPR (CLKPCE = 1)
-	STS CLKPR, R16			  ; Escribir en CLKPR para desbloquear cambios
-	LDI R16, 0b00000100       ; Configurar prescaler a 8 (8 MHz / 8 = 1 MHz)
-	STS CLKPR, R16            ; Aplicar prescaler
+	
 
 	
 	//////////////////INICIAR TIMER0 E INTERRUPCIONES////////////////////////
