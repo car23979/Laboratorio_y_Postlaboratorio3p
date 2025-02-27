@@ -12,6 +12,12 @@ Descripción:
 // Encabezado
 .include "M328PDEF.inc"
 
+// Definición de registros
+.DEF    DISPLAY = R21
+.DEF    DECENAS = R23
+.DEF    UNIDADES = R24
+.DEF    CONTADOR_D = R25
+
 // Variables
 .cseg
 .org	0x0000				//Vector de Reset
