@@ -70,37 +70,18 @@ INICIO:
     CALL    ACTUALIZAR_DISPLAY
     LDI     CONTADOR_D, 0x00
 
-	//PUNTERO
-	LDI		ZH, HIGH(DATA << 1)
-	LDI		ZL, LOW(DATA << 1)
-	LPM		R16, Z
-	OUT		PORTD, R16
+	// Configurar interrupciones
+    LDI     R16, (1 << PCIE1)  // Habilitar PCIE1
+    STS     PCICR, R16
+    LDI     R16, (1 << PCINT8) | (1 << PCINT9)  // Habilitar PC0 y PC1
+    STS     PCMSK1, R16
 
-	//APAGAR LEDS ARDUINO
-	LDI		R16, 0x00
-	STS		UCSR0B, R16
+    LDI     R16, (1 << TOIE0)  // Habilitar interrupción Timer0
+    STS     TIMSK0, R16
 
-	//CONFIGURACIONES INICIALES
-	LDI		R17, 0xFF		//GUARDA EL VALOR DEL CONTADOR
-	LDI		R18, 0x00		//CONTADOR DE LOS LEDS
-	LDI		COUNTER, 0x00	//CONTADOR INTERNO DEL TIMER0
-	LDI		R22, 0x00
-	OUT		PORTD, R18
-	OUT		PORTB, R22
+    SEI  // Habilitar interrupciones globales
 
-	LDI     DISP_COUNTER, 0x00
-	LDI     ZH, HIGH(DATA << 1)
-	LDI     ZL, LOW(DATA << 1)
-	LPM     R16, Z              ; Cargar el primer número (0x3F) de DATA
-	OUT     PORTD, R16          ; Mostrar el 0 correctamente en el display
-		//Modifico el 7 segmentos en PORTD
-
-
-	//MOSTRAR EL VALOR ACTUAL DEL DISPLAY(TIENE QUE SER 0)
-	//CALL	DISPLAY
-	CALL	 INIT_TMR0
-    CALL	 PORTC_INT
-	SEI
+    LDI     R17, 0x00  // Inicializar contador
 
 
 MAIN:
