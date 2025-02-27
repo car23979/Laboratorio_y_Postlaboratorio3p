@@ -159,3 +159,12 @@ RETARDO_3:
     CPI     R18, 0
     BRNE    RETARDO_3
     RET
+
+// RUTINAS DE INTERRUPCIÓN
+PCINT_ISR:
+    IN      R18, PINC  // Leer estado de los pines
+    SBRS    R18, 0  // Si PC0 está alto, incrementar
+    CALL    INCREMENTAR_CONTADOR
+    SBRS    R18, 1  // Si PC1 está alto, decrementar
+    CALL    DECREMENTAR_CONTADOR
+    RETI
