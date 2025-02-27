@@ -114,91 +114,26 @@ INICIALIZAR_TIMER:
     OUT     TCNT0, R16  // Valor inicial
     RET
 
+ACTUALIZAR_DISPLAY:
+    // Mostrar unidades
+    SBI     PORTC, 4  // Encender bit 4
+    CBI     PORTC, 5  // Apagar bit 5
+    LDI     ZH, HIGH(TABLA << 1)
+    LDI     ZL, LOW(TABLA << 1)
+    ADD     ZL, UNIDADES
+    LPM     R23, Z
+    OUT     PORTD, R23
+    CALL    RETARDO
 
+    // Mostrar decenas
+    CBI     PORTC, 4  // Apagar bit 4
+    SBI     PORTC, 5  // Encender bit 5
+    LDI     ZH, HIGH(TABLA << 1)
+    LDI     ZL, LOW(TABLA << 1)
+    ADD     ZL, CONTADOR_D
+    LPM     R23, Z
+    OUT     PORTD, R23
+    CALL    RETARDO
 
-
-DISPLAY_CHANGE:
-
-	PUSH    R16
-    IN      R16, SREG
-    PUSH    R16
-	PUSH	R17
-	LDI		R16, 100			// VALOR QUE SE CARGA AL TEMPORIZADOR PARA CONTAR
-	OUT		TCNT0, R16
-	
-	INC		COUNTER				
-	CPI		COUNTER, 100		//HACE LA COMPARACIÓN SI ES IGUAL A 10(QUE TAN RAPIDO CUENTA)
-	BRNE	CONTADOR_EXIT		//Z = 0, SALTA A CONTADOR_EXIT. Z = 1, NO SALTA.
-	CLR		COUNTER		
-
-    ; Verificar si se debe incrementar o decrementar el contador
-	
-	INC		DISP_COUNTER
-	ANDI	DISP_COUNTER,  0x0F
-    LDI		ZH, HIGH(DATA << 1)
-	LDI		ZL, LOW(DATA << 1)	//PUNTERO APUNTA A LA TABLA Z
-	ADD		ZL, DISP_COUNTER				//Añadir el valor del contador R20 al puntero Z para obtener la salida en PORTD
-	LPM		R16, Z				//Copia el valor guardado en el nuevo Z
-	OUT		PORTD, R16			//Modifico el 7 segmentos en PORTD
-CONTADOR_EXIT: 
-	
-	POP		R17
-    POP     R16
-    OUT     SREG, R16
-    POP     R16   
-	RETI	
-
-
-//PINCHANGE COMO INTERRUPCION
-PIN_CHANGE:
-	
-	PUSH    R16
-    IN      R16, SREG
-    PUSH    R16
-	PUSH	R17
-
-    IN      R16, PINC		//LEER PINC
-	MOV		R17, R16
-	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
-	BREQ	EXIT  
-	CALL	DELAY
-
-	IN      R16, PINC		//LEER PINC
-	MOV		R17, R16
-	EOR		R17, PIN_PREV	//LEE LOS CAMBIOS
-	BREQ	EXIT  
-    
-	SBRC	R17, PC1
-	CALL	INCREMENTO
-
-	SBRC	R17, PC0
-	CALL	DECREMENTO
-
-	MOV		PIN_PREV, R16	//ACTUALIZAR CON EL ESTADO EN QUE SE QUEDO
-
-EXIT:
-	POP		R17
-    POP     R16
-    OUT     SREG, R16
-    POP     R16
-    RETI
-	
-
-	
-DELAY:
-    LDI     R19, 0xFF
-SUB_DELAY1:
-    DEC     R19
-    CPI     R19, 0
-    BRNE    SUB_DELAY1
-    LDI     R19, 0xFF
-SUB_DELAY2:
-    DEC     R19
-    CPI     R19, 0
-    BRNE    SUB_DELAY2
-    LDI     R19, 0xFF
-SUB_DELAY3:
-    DEC     R19
-    CPI     R19, 0
-    BRNE    SUB_DELAY3
     RET
+
