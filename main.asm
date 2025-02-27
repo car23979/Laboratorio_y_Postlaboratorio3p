@@ -186,3 +186,10 @@ TIMER_ISR:
     CPI     CONTADOR_D, 6
     BRNE    FIN_ISR
     CLR     CONTADOR_D  // Reiniciar decenas
+
+FIN_ISR:
+    CALL    ACTUALIZAR_DISPLAY
+    POP     R16
+    OUT     SREG, R16
+    POP     R16
+    RETI
