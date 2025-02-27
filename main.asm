@@ -65,6 +65,11 @@ INICIO:
     LDI     R16, 0x00
     STS     UCSR0B, R16
 
+	// Iniciar el display en 0s
+    LDI     DISPLAY, 0x00
+    CALL    ACTUALIZAR_DISPLAY
+    LDI     CONTADOR_D, 0x00
+
 	//PUNTERO
 	LDI		ZH, HIGH(DATA << 1)
 	LDI		ZL, LOW(DATA << 1)
