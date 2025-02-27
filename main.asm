@@ -168,3 +168,21 @@ PCINT_ISR:
     SBRS    R18, 1  // Si PC1 está alto, decrementar
     CALL    DECREMENTAR_CONTADOR
     RETI
+
+TIMER_ISR:
+    PUSH    R16
+    IN      R16, SREG
+    PUSH    R16
+
+    INC     R22  // Incrementar contador de interrupciones
+    CPI     R22, 100  // Comparar con 100
+    BRNE    FIN_ISR  // Si no es 100, salir
+    CLR     R22  // Reiniciar contador
+
+    INC     UNIDADES  // Incrementar unidades
+    CPI     UNIDADES, 10
+    BRNE    FIN_ISR  // Si no es 10, salir
+    CALL    ACTUALIZAR_DECENAS
+    CPI     CONTADOR_D, 6
+    BRNE    FIN_ISR
+    CLR     CONTADOR_D  // Reiniciar decenas
