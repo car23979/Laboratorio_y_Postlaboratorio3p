@@ -43,20 +43,8 @@ INICIO:
     STS     CLKPR, R16  // Habilitar cambio de PRESCALER
     LDI     R16, 0b00000100
     STS     CLKPR, R16  // Prescaler a 16 (F_cpu = 1MHz)
+		
 	
-	//////////////////INICIAR TIMER0 E INTERRUPCIONES////////////////////////
-	
-	//PILA
-	LDI		R16, LOW(RAMEND)
-	OUT		SPL, R16
-	LDI		R16, HIGH(RAMEND)
-	OUT		SPH, R16
-
-	//PUNTERO
-	LDI		ZH, HIGH(DATA << 1)
-	LDI		ZL, LOW(DATA << 1)
-	LPM		R16, Z
-	OUT		PORTD, R16
 
 	//CONFIGURANDO SALIDAS
 	LDI		R16, 0xFF
