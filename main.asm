@@ -19,13 +19,16 @@ Descripción:
 .DEF    CONTADOR_D = R25
 
 // Variables
+.ORG    0x0000
+    RJMP    INICIO  // Vector Reset
+
+.ORG    PCI1addr
+    RJMP    PCINT_ISR  // Vector de interrupción PCINT1
+.ORG    0x0020
+    RJMP    TIMER_ISR
+
 .cseg
-.org	0x0000				//Vector de Reset
-		RJMP	SETUP
-.org	0x0008				//Vector de Interrupción PINCHANGE Interrupt R1
-		RJMP	PIN_CHANGE
-.org    0x0020
-		RJMP    DISPLAY_CHANGE	//Vector de Interrupción TIMER0
+.def CONTADOR = R19  // Variable para el contador
 
 		
 DATA:
