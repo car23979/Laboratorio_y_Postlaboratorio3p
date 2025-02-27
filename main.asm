@@ -36,14 +36,6 @@ Descripción:
     LDI     R16, HIGH(RAMEND)
     OUT     SPH, R16
 		
-
-//////////////////////////////////DEFINICION VARIABLES GLOBALES/////////////
-
-.def	DISP_COUNTER = R18  //DEFINICION DE VARIABLE GLOBAL EN REGISTRO R18
-.def	PIN_PREV =	R19
-.def	LED_COUNTER = R22   //DEFINICION DE VARIABLE GLOBAL EN REGISTRO R22
-.def	COUNTER = R23		//DEFINICION DE VARIABLE GLOBAL EN REGISTRO R23
-
 ////////////////////////////////////CONFIGURANDO EL MCU//////////////////////
 SETUP:
 
